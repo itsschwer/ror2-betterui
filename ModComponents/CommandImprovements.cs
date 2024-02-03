@@ -30,7 +30,8 @@ namespace BetterUI
             }
 
             if (ConfigManager.CommandTooltipsShow.Value ||
-                ConfigManager.CommandCountersShow.Value)
+                ConfigManager.CommandCountersShow.Value ||
+                ConfigManager.CommandShowCorrupted.Value)
             {
                 BetterUIPlugin.Hooks.Add<RoR2.UI.PickupPickerPanel, int, MPButton>("OnCreateButton", PickupPickerPanel_OnCreateButton);
             }
@@ -192,10 +193,22 @@ namespace BetterUI
         {
             orig(self, optionMap[0] >= 0 ? optionMap[index] : index, button);
 
-            if (ConfigManager.CommandTooltipsShow.Value || ConfigManager.CommandCountersShow.Value)
+            if (ConfigManager.CommandTooltipsShow.Value || ConfigManager.CommandCountersShow.Value || ConfigManager.CommandShowCorrupted.Value)
             {
                 CharacterMaster master = LocalUserManager.GetFirstLocalUser().cachedMasterController.master;
                 PickupDef pickupDef = PickupCatalog.GetPickupDef(self.pickerController.options[optionMap[0] >= 0 ? optionMap[index] : index].pickupIndex);
+
+                if (pickupDef.itemIndex != ItemIndex.None && ConfigManager.CommandShowCorrupted.Value)
+                {
+                    if (self.pickerController.contextString == "ARTIFACT_COMMAND_CUBE_INTERACTION_PROMPT")
+                    {
+                        ItemIndex transformedIndex = RoR2.Items.ContagiousItemManager.GetTransformedItemIndex(pickupDef.itemIndex);
+                        if (transformedIndex != ItemIndex.None && master.inventory.itemStacks[(int)transformedIndex] > 0)
+                        {
+                            pickupDef = PickupCatalog.GetPickupDef(PickupCatalog.FindPickupIndex(transformedIndex));
+                        }
+                    }
+                }
 
                 if (pickupDef.itemIndex != ItemIndex.None && ConfigManager.CommandCountersShow.Value)
                 {
@@ -233,7 +246,7 @@ namespace BetterUI
                     {
                         ItemDef itemDef = ItemCatalog.GetItemDef(pickupDef.itemIndex);
 
-                        if (ConfigManager.AdvancedIconsItemItemStatsIntegration.Value) // TODO: Replace with config option
+                        if (ConfigManager.ComponentsAdvancedIcons.Value && ConfigManager.AdvancedIconsItemItemStatsIntegration.Value) // TODO: Replace with config option
                         {
                             int count = master.inventory.itemStacks[(int)pickupDef.itemIndex];
                             var stringBuilder = BetterUIPlugin.sharedStringBuilder;

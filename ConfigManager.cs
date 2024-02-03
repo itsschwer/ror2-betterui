@@ -83,6 +83,7 @@ namespace BetterUI
         public static TMPro.TextAlignmentOptions CommandCountersTextAlignmentOption;
         public static ConfigEntry<float> CommandCountersFontSize;
         public static ConfigEntry<String> CommandCountersPrefix;
+        public static ConfigEntry<bool> CommandShowCorrupted;
 
         // DPSMeter
 
@@ -328,6 +329,8 @@ namespace BetterUI
             CommandCountersFontSize = Bind(ConfigFileCommandImprovements, "Command / Scrapper Improvements", "CountersFontSize", 20f, "Size of the command item counter text.");
 
             CommandCountersPrefix = Bind(ConfigFileCommandImprovements, "Command / Scrapper Improvements", "CountersPrefix", "x", "Prefix for the command item counter. Example 'x' will show x0, x1, x2, etc.\nCan be empty.");
+
+            CommandShowCorrupted = Bind(ConfigFileCommandImprovements, "Command / Scrapper Improvements", "ShowCorrupted", true, "Replace corrupted items with their void counterpart.");
         }
 
         static void BindDPSMeterConfig()
