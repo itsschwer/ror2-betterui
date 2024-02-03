@@ -93,14 +93,14 @@ namespace BetterUI
         {
             orig(dmgMsg);
 
-            CharacterMaster localMaster = LocalUserManager.GetFirstLocalUser().cachedMasterController.master;
+            CharacterMaster targetMaster = LocalUserManager.GetFirstLocalUser().cameraRigController.targetBody.master;
 
             if (dmgMsg.attacker && dmgMsg.victim)
             {
                 var victimBody = dmgMsg.victim.gameObject.GetComponent<CharacterBody>();
                 if (victimBody && victimBody.teamComponent.teamIndex != TeamIndex.Player)
                 {
-                    if (dmgMsg.attacker == localMaster.GetBodyObject())
+                    if (dmgMsg.attacker == targetMaster.GetBodyObject())
                     {
                         characterDamageSum += dmgMsg.damage;
                         characterDamageLog.Enqueue(new DamageLog(dmgMsg.damage));
@@ -108,7 +108,7 @@ namespace BetterUI
                     else
                     {
                         var attackerBody = dmgMsg.attacker.GetComponent<CharacterBody>();
-                        if (attackerBody && attackerBody.master && attackerBody.master.minionOwnership && attackerBody.master.minionOwnership.ownerMasterId == localMaster.netId)
+                        if (attackerBody && attackerBody.master && attackerBody.master.minionOwnership && attackerBody.master.minionOwnership.ownerMasterId == targetMaster.netId)
                         {
                             minionDamageSum += dmgMsg.damage;
                             minionDamageLog.Enqueue(new DamageLog(dmgMsg.damage));
