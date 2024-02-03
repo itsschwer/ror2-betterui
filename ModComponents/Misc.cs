@@ -34,6 +34,10 @@ namespace BetterUI
                 BetterUIPlugin.Hooks.Add<RoR2.UI.ContextManager>("Awake", ContextManager_Awake);
                 BetterUIPlugin.Hooks.Add<RoR2.GenericPickupController>("GetContextString", (GenericPickupController_GetContextString_Delegate)GenericPickupController_GetContextString);
             }
+            if (ConfigManager.MiscRunDifficultyTooltip.Value)
+            {
+                BetterUIPlugin.Hooks.Add<RoR2.UI.CurrentDifficultyIconController>("Start", CurrentDifficultyIconController_Start);
+            }
         }
 
         internal static void ContextManager_Awake(Action<RoR2.UI.ContextManager> orig, RoR2.UI.ContextManager self)
@@ -100,6 +104,20 @@ namespace BetterUI
             orig(self, itemDef);
 
             self.descriptionText.token = itemDef.descriptionToken;
+        }
+
+        internal static void CurrentDifficultyIconController_Start(Action<RoR2.UI.CurrentDifficultyIconController> orig, RoR2.UI.CurrentDifficultyIconController self)
+        {
+            orig(self);
+            
+            if (Run.instance != null)
+            {
+                DifficultyDef difficultyDef = DifficultyCatalog.GetDifficultyDef(Run.instance.selectedDifficulty);
+                RoR2.UI.TooltipProvider tooltip = self.gameObject.AddComponent<RoR2.UI.TooltipProvider>();
+                tooltip.titleColor = difficultyDef.color;
+                tooltip.titleToken = difficultyDef.nameToken;
+                tooltip.bodyToken = difficultyDef.descriptionToken;
+            }
         }
     }
 }

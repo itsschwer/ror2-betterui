@@ -43,6 +43,7 @@ namespace BetterUI
         public static ConfigEntry<bool> MiscHidePickupNotificiationsArtifacts;
         public static ConfigEntry<bool> MiscShowPickupDescription;
         public static ConfigEntry<bool> MiscPickupDescriptionAdvanced;
+        public static ConfigEntry<bool> MiscRunDifficultyTooltip;
 
         // AdvancedIcons
 
@@ -234,6 +235,8 @@ namespace BetterUI
             MiscShowPickupDescription = Bind(ConfigFileMisc, "Misc", "ShowPickupDescription", true, "Show the item description on the interaction pop-up.");
 
             MiscPickupDescriptionAdvanced = Bind(ConfigFileMisc, "Misc", "PickupDescriptionAdvanced", false, "Show advanced descriptions for the interaction pop-up.");
+
+            MiscRunDifficultyTooltip = Bind(ConfigFileMisc, "Misc", "RunDifficultyTooltip", true, "Show run difficulty information for the HUD difficulty icon tooltip.");
         }
 
         static void BindAdvancedIconsConfig()
