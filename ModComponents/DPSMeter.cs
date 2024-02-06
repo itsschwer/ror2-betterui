@@ -93,7 +93,8 @@ namespace BetterUI
         {
             orig(dmgMsg);
 
-            CharacterMaster targetMaster = LocalUserManager.GetFirstLocalUser().cameraRigController.targetBody.master;
+            CharacterMaster targetMaster = LocalUserManager.GetFirstLocalUser().cameraRigController?.targetBody?.master;
+            if (targetMaster == null) return;
 
             if (dmgMsg.attacker && dmgMsg.victim)
             {
