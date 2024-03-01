@@ -114,12 +114,15 @@ namespace BetterUI
             {
                 DifficultyDef difficultyDef = DifficultyCatalog.GetDifficultyDef(Run.instance.selectedDifficulty);
 
-                // Why won't this work??
-                UnityEngine.GameObject targetRaycaster = self.GetComponentInParent<UnityEngine.Canvas>()?.gameObject;
-                if (targetRaycaster?.GetComponent<UnityEngine.UI.GraphicRaycaster>() == null) {
-                    targetRaycaster.AddComponent<UnityEngine.UI.GraphicRaycaster>();
-                    UnityEngine.Debug.LogWarning($"BetterUI> Added {nameof(UnityEngine.UI.GraphicRaycaster)} to {targetRaycaster.name}");
+                UnityEngine.GameObject parentCanvas = self.GetComponentInParent<UnityEngine.Canvas>()?.gameObject;
+                if (parentCanvas?.GetComponent<UnityEngine.UI.GraphicRaycaster>() == null) {
+                    parentCanvas.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+#if DEBUG
+                    UnityEngine.Debug.Log($"BetterUI: Added {nameof(UnityEngine.UI.GraphicRaycaster)} to {parentCanvas.name}");
+#endif
                 }
+
+                self.GetComponent<UnityEngine.UI.Graphic>().raycastTarget = true;
 
                 RoR2.UI.TooltipProvider tooltip = self.gameObject.AddComponent<RoR2.UI.TooltipProvider>();
                 tooltip.titleColor = difficultyDef.color;
